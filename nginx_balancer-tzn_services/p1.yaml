@@ -1,0 +1,49 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-one
+  labels:
+    app: hello-world-one
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-world-one
+  template:
+    metadata:
+      labels:
+        app: hello-world-one
+    spec:
+      containers:
+        - image: gcr.io/google-samples/hello-app:1.0
+          name: hello-world-one
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hello-world-one
+spec:
+  ports:
+    - port: 8080
+  selector:
+    app: hello-world-one
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ingress-resource
+spec:
+  ingressClassName: nginx
+  rules:
+    - host: project-one.ivanfretes.com
+      http:
+        paths:
+        - path: "/hello"
+          pathType: Prefix
+          backend:
+            service:
+              name: hello-world-one
+              port:
+                number: 8080

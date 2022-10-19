@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hello-world-two
+  labels:
+    app: hello-world-two
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hello-world-two
+  template:
+    metadata:
+      labels:
+        app: hello-world-two
+    spec:
+      containers:
+        - name: hello-world-two
+          image: gcr.io/google-samples/whereami:v1.1.1
+          ports:
+            - containerPort: 8080
